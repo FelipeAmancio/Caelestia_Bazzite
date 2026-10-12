@@ -166,8 +166,8 @@ cat > /usr/share/wayland-sessions/hyprland-caelestia.desktop <<'SESSION'
 [Desktop Entry]
 Name=Hyprland (Caelestia)
 Comment=Hyprland desktop with the Caelestia shell
-Exec=Hyprland
-TryExec=Hyprland
+Exec=/usr/bin/start-hyprland
+TryExec=/usr/bin/start-hyprland
 Type=Application
 DesktopNames=Hyprland
 SESSION
