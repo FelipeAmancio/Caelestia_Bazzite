@@ -22,8 +22,18 @@ dnf5 -y install --setopt=install_weak_deps=False \
 log 'Building libcava for Caelestia'
 git clone --depth 1 https://github.com/LukashonakV/cava.git "$WORKDIR/cava"
 meson setup "$WORKDIR/cava/build" "$WORKDIR/cava" \
-  --prefix=/usr/local --libdir=lib64 --buildtype=release
-meson compile -C "$WORKDIR/cava/build"
+  --prefix=/usr/local \
+  --libdir=lib64 \
+  --buildtype=release \
+  -Dwarning_level=1
+
+if ! meson compile -C "$WORKDIR/cava/build" --verbose \
+    > "$WORKDIR/cava-build.log" 2>&1; then
+  echo "ERRO: a compilação do Cava falhou. Diagnóstico:"
+  tail -n 120 "$WORKDIR/cava-build.log"
+  exit 1
+fi
+
 meson install -C "$WORKDIR/cava/build"
 
 CAVA_PC=/usr/local/lib64/pkgconfig/libcava.pc
