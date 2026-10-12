@@ -31,6 +31,26 @@ jobs:
       id-token: write
 
     steps:
+    
+      - name: Liberar espaço em disco
+        uses: jlumbroso/free-disk-space@v2
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          preinstalled-runtimes: false
+          swap-storage: false
+
+      - name: Verificar espaço disponível
+        shell: bash
+        run: |
+          echo "=== Espaço disponível ==="
+          df -hT
+          echo "=== Inodes disponíveis ==="
+          df -ih
+
       # These stage versions are pinned by https://github.com/renovatebot/renovate
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
