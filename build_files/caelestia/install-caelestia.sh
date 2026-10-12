@@ -22,7 +22,7 @@ dnf5 -y install --setopt=install_weak_deps=False \
 log 'Building libcava for Caelestia'
 git clone --depth 1 https://github.com/LukashonakV/cava.git "$WORKDIR/cava"
 meson setup "$WORKDIR/cava/build" "$WORKDIR/cava" \
-  --prefix=/usr/local \
+  --prefix=/usr \
   --libdir=lib64 \
   --buildtype=release \
   -Dwarning_level=1
@@ -36,7 +36,7 @@ fi
 
 meson install -C "$WORKDIR/cava/build"
 
-CAVA_PC=/usr/local/lib64/pkgconfig/libcava.pc
+CAVA_PC=/usr/lib64/pkgconfig/libcava.pc
 if [[ ! -f "$CAVA_PC" ]]; then
   echo "ERROR: Expected libcava pkg-config file at $CAVA_PC, but it was not created." >&2
   find /usr/local -name '*cava*.pc' -print >&2 || true
@@ -45,7 +45,8 @@ fi
 # The shell includes <cava/cavacore.h>; make the include parent directory visible
 # to pkg-config in addition to the subdirectory emitted by this Cava fork.
 sed -i '/^Cflags:/s|Cflags: |Cflags: -I${includedir} |' "$CAVA_PC"
-export PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+
 
 log 'Installing app2unit'
 git clone --depth 1 https://github.com/Vladimir-csp/app2unit.git "$WORKDIR/app2unit"
