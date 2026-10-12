@@ -84,6 +84,48 @@ install -D -m 0644 \
   "$WORKDIR/hyprbazzite-config/caelestia-overrides/shell.qml" \
   "$WORKDIR/nosignal-shell/shell.qml"
 
+log 'Adapting legacy workspace dispatchers to Hyprland Lua'
+
+python3 - "$WORKDIR/nosignal-shell/services/Hypr.qml" <<'PY'
+from pathlib import Path
+import sys
+
+p = Path(sys.argv[1])
+source = p.read_text()
+
+old = """    function dispatch(request: string): void {
+        Hyprland.dispatch(request);
+    }
+"""
+
+new = r'''    function dispatch(request: string): void {
+        if (Hyprland.usingLua) {
+            const workspace = request.match(/^workspace\s+(.+)$/);
+            if (workspace) {
+                Hyprland.dispatch(`hl.dsp.focus({ workspace = ${JSON.stringify(workspace[1])} })`);
+                return;
+            }
+
+            const special = request.match(/^togglespecialworkspace(?:\s+(.+))?$/);
+            if (special) {
+                Hyprland.dispatch(`hl.dsp.workspace.toggle_special(${JSON.stringify(special[1] || "special")})`);
+                return;
+            }
+        }
+
+        Hyprland.dispatch(request);
+    }
+'''
+
+if old in source:
+    p.write_text(source.replace(old, new, 1))
+    print("OK: workspace dispatchers adapted to Lua.")
+elif "request.match(/^workspace\\s+" in source and "hl.dsp.workspace.toggle_special" in source:
+    print("OK: compatibility patch already present.")
+else:
+    sys.exit("ERROR: unexpected Hypr.qml layout; no changes made.")
+PY
+
 log 'Adapting workspace dispatch to Lua-enabled Hyprland'
 
 python3 - "$WORKDIR/nosignal-shell" <<'PY'
