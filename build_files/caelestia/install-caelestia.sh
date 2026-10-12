@@ -13,7 +13,7 @@ log 'Enabling the Quickshell COPR and installing runtime/build dependencies'
 dnf5 -y copr enable errornointernet/quickshell
 dnf5 -y install --setopt=install_weak_deps=False \
   quickshell \
-  cmake ninja-build gcc gcc-c++ make git meson python3-pip python3-devel pkgconf-pkg-config curl \
+  cmake ninja-build gcc gcc-c++ make git meson scdoc python3-pip python3-devel pkgconf-pkg-config curl \
   aubio-devel libqalculate-devel qt6-qtdeclarative-devel qt6-qtbase-devel \
   qt6-qtshadertools-devel qt6-qtimageformats pipewire-devel iniparser-devel \
   fftw-devel lm_sensors-devel brightnessctl fish swappy \
