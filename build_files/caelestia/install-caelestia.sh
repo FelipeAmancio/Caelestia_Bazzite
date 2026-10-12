@@ -19,6 +19,18 @@ dnf5 -y install --setopt=install_weak_deps=False \
   fftw-devel lm_sensors-devel brightnessctl fish swappy \
   google-rubik-fonts cascadia-code-nf-fonts
 
+log 'Installing UWSM'
+dnf5 -y copr enable giperborey/Hyprland
+dnf5 -y --exclude=hyprland install \
+  --setopt=install_weak_deps=False uwsm
+dnf5 -y copr disable giperborey/Hyprland
+
+log 'Installing Hyprland GUI utilities'
+dnf5 -y copr enable nett00n/hyprland
+dnf5 -y --exclude=hyprland install \
+  --setopt=install_weak_deps=False hyprland-guiutils
+dnf5 -y copr disable nett00n/hyprland
+
 log 'Building libcava for Caelestia'
 git clone --depth 1 https://github.com/LukashonakV/cava.git "$WORKDIR/cava"
 meson setup "$WORKDIR/cava/build" "$WORKDIR/cava" \
@@ -168,6 +180,15 @@ Name=Hyprland (Caelestia)
 Comment=Hyprland desktop with the Caelestia shell
 Exec=/usr/bin/start-hyprland
 TryExec=/usr/bin/start-hyprland
+Type=Application
+DesktopNames=Hyprland
+SESSION
+cat > /usr/share/wayland-sessions/hyprland-caelestia-uwsm.desktop <<'SESSION'
+[Desktop Entry]
+Name=Hyprland (Caelestia, UWSM)
+Comment=Hyprland desktop with Caelestia managed by UWSM
+Exec=uwsm start -e -D Hyprland hyprland.desktop
+TryExec=uwsm
 Type=Application
 DesktopNames=Hyprland
 SESSION
