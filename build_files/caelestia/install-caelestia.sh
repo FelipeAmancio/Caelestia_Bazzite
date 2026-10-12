@@ -16,7 +16,7 @@ dnf5 -y install --setopt=install_weak_deps=False \
   cmake ninja-build gcc gcc-c++ make git meson python3-pip python3-devel pkgconf-pkg-config curl \
   aubio-devel libqalculate-devel qt6-qtdeclarative-devel qt6-qtbase-devel \
   qt6-qtshadertools-devel qt6-qtimageformats pipewire-devel iniparser-devel \
-  fftw-devel lm_sensors-devel ddcutil brightnessctl fish swappy \
+  fftw-devel lm_sensors-devel brightnessctl fish swappy \
   google-rubik-fonts cascadia-code-nf-fonts
 
 log 'Building libcava for Caelestia'
