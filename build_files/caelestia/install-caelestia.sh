@@ -49,7 +49,7 @@ export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:/usr/lib/pkgconfig${PKG_CONFIG_PATH
 
 log 'Installing app2unit'
 git clone --depth 1 https://github.com/Vladimir-csp/app2unit.git "$WORKDIR/app2unit"
-make -C "$WORKDIR/app2unit" PREFIX=/usr install
+make -C "$WORKDIR/app2unit" prefix=/usr install
 
 log 'Installing the Caelestia CLI'
 git clone --depth 1 https://github.com/caelestia-dots/cli.git "$WORKDIR/caelestia-cli"
